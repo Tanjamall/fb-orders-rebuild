@@ -265,7 +265,8 @@ export const InventoryManager: React.FC<InventoryManagerProps> = ({ inventory, v
                 }} className="mt-3 text-xs text-blue-600 font-bold hover:underline cursor-pointer">
               Clear filters
             </button>)}
-        </div>) : (<div className="space-y-1.5">
+        </div>) : (<div className="inventory-ledger space-y-1.5">
+          <div className="inventory-ledger__head sm:hidden" aria-hidden="true"><span>Product</span><span>Cost · DH</span><span>Sell · DH</span><span>Stock</span><span/></div>
           {/* Column Header for desktop */}
           <div className="hidden sm:flex items-center justify-between px-3.5 py-1 text-[11px] font-bold uppercase tracking-wider text-slate-400">
             <span className="flex-1">Product Title</span>
@@ -322,7 +323,7 @@ export const InventoryManager: React.FC<InventoryManagerProps> = ({ inventory, v
                     </button>
                   </>)}
               </div>);
-                return (<div key={item.id} className={`bg-white rounded-xl border transition-all p-3 sm:px-3.5 sm:py-2.5 shadow-2xs hover:border-slate-300 ${isArchived ? 'opacity-70 bg-slate-50/70 border-slate-200' : 'border-slate-200'}`}>
+                return (<div key={item.id} className={`inventory-ledger__item bg-white rounded-xl border transition-all p-3 sm:px-3.5 sm:py-2.5 shadow-2xs hover:border-slate-300 ${isArchived ? 'opacity-70 bg-slate-50/70 border-slate-200' : 'border-slate-200'}`}>
                 {/* Desktop View (>= sm): Single horizontal row aligned with column headers */}
                 <div className="hidden sm:flex items-center justify-between gap-3">
                   {/* 1. Product Title */}
@@ -374,12 +375,12 @@ export const InventoryManager: React.FC<InventoryManagerProps> = ({ inventory, v
 
                 <div className="inventory-mobile-row sm:hidden">
                   <button onClick={() => onOpenProductDetails(item)} className="inventory-mobile-row__title" title={item.title}><bdi>{item.title}</bdi></button>
-                  <div className="inventory-mobile-row__metric"><span>Cost</span><strong>{canViewFinancials ? 'DH '+item.costPrice.toLocaleString('en-GB',{maximumFractionDigits:2}) : '—'}</strong></div>
-                  <div className="inventory-mobile-row__metric"><span>Sell</span><strong className="text-slate-900">DH {item.sellingPrice.toLocaleString('en-GB',{maximumFractionDigits:2})}</strong></div>
-                  <div className="inventory-mobile-row__metric"><span>Stock</span><strong className={isOut?'text-rose-700':isLow?'text-amber-700':'text-emerald-700'}>{item.stock}</strong></div>
+                  <span className="inventory-mobile-row__amount" aria-label="Unit cost in DH">{canViewFinancials ? item.costPrice.toLocaleString('en-GB',{useGrouping:false,maximumFractionDigits:2}) : '—'}</span>
+                  <span className="inventory-mobile-row__amount" aria-label="Selling price in DH">{item.sellingPrice.toLocaleString('en-GB',{useGrouping:false,maximumFractionDigits:2})}</span>
+                  <span aria-label={'Stock: '+item.stock} className={'inventory-mobile-row__stock'+(isOut?' is-out':isLow?' is-low':'')}>{item.stock}</span>
                   <div className="relative" data-item-menu><button onClick={() => setActiveMenuId(isMenuOpen ? null : item.id)} className="inventory-mobile-row__menu" aria-label={'Actions for '+item.title} aria-haspopup="menu" aria-expanded={isMenuOpen}><MoreVertical className="w-4 h-4"/></button>{isMenuOpen && renderDropdownMenu()}</div>
                 </div>
-                <InventoryVariants item={item}/>
+                <InventoryVariants item={item} ledger/>
               </div>);
             })}
         </div>)}

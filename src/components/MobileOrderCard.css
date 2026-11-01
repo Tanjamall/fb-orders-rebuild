@@ -1,0 +1,39 @@
+.mobile-order-card{container-type:inline-size;position:relative;min-width:0;border:1px solid #e2e8f0;border-radius:15px;background:#fff;padding:11px 12px;color:#0f172a;box-shadow:0 1px 3px #0f172a04;font-family:var(--font-sans);cursor:pointer}
+.mobile-order-card__grid{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1.2fr) minmax(0,.8fr);column-gap:8px;align-items:start}
+.mobile-order-card__products{min-width:0;padding-top:0;font-size:14px;font-weight:750;line-height:18px;letter-spacing:-.025em}
+.mobile-order-card__product{display:flex;align-items:baseline;gap:4px;overflow-wrap:anywhere}
+.mobile-order-card__quantity{flex-shrink:0;white-space:nowrap;font-variant-numeric:tabular-nums}
+.mobile-order-card__money{min-width:0;justify-self:center;padding-top:0;white-space:nowrap;font-size:14px;font-weight:750;line-height:18px;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.mobile-order-card__profit{color:#00b873}.mobile-order-card__profit.is-negative{color:#e11d48}
+.mobile-order-card__name{min-width:0;align-self:center;overflow-wrap:anywhere;font-size:13px;font-weight:700;line-height:18px}
+.mobile-order-card__phone{min-width:0;align-self:center;justify-self:center;white-space:nowrap;color:#0860ff;font-size:12px;font-weight:500;line-height:18px;text-decoration:none;font-variant-numeric:tabular-nums;letter-spacing:0}
+.mobile-order-card__phone:hover{text-decoration:underline}
+.mobile-order-card__whatsapp{display:flex;width:44px;height:44px;align-items:center;justify-content:center;justify-self:center;color:#00b86b;border-radius:10px}
+.mobile-order-card__whatsapp>span{display:flex;width:31px;height:31px;align-items:center;justify-content:center;border:1px solid #d1fae5;border-radius:8px;background:#eafff3}
+.mobile-order-card__whatsapp:hover>span{background:#d1fae5}.mobile-order-card__whatsapp:focus-visible{outline:2px solid #10b981;outline-offset:2px}
+.mobile-order-card__location{display:flex;min-height:28px;align-items:center;gap:7px;border:1px solid #edf1f6;border-radius:10px;background:#fbfcfe;padding:1px 3px 1px 7px;color:#2563eb}
+.mobile-order-card__address{min-width:0;flex:1;overflow-wrap:anywhere;color:#52627b;font-size:12px;line-height:17px}
+.mobile-order-card__location-actions{display:flex;flex-shrink:0;align-items:center;gap:3px}
+.mobile-order-card__copy{display:flex;align-items:center;justify-content:center;width:25px;height:25px;border-radius:7px;color:#8b9ab0}
+.mobile-order-card__copy:hover{background:#f1f5f9;color:#475569}
+.mobile-order-card__map{display:inline-flex;min-height:24px;align-items:center;justify-content:center;gap:4px;border:1px solid #dbe6f9;border-radius:8px;background:#fff;padding:1px 6px;color:#0860ff;font-size:12px;font-weight:650;text-decoration:none;box-shadow:0 1px 2px #2563eb05}
+.mobile-order-card__map:hover{background:#eff6ff}
+.mobile-order-card__note{display:flex;align-items:flex-start;gap:8px;margin-top:6px;border:1px solid #ffedb1;border-radius:10px;background:#fffbeb;padding:3px 9px;color:#a85505;font-size:12px;line-height:17px}
+.mobile-order-card__note>svg{margin-top:1px;flex-shrink:0;color:#ef8500}.mobile-order-card__note p{min-width:0;overflow-wrap:anywhere;margin:0}
+.mobile-order-card__agent{display:flex;align-items:center;gap:6px;margin-top:6px;border-radius:8px;background:#eff6ff;padding:5px 8px;color:#1e40af;font-size:11px;line-height:16px}.mobile-order-card__agent>span{min-width:0;flex:1;overflow-wrap:anywhere}.mobile-order-card__agent strong{white-space:nowrap}.mobile-order-card__agent small{font-size:9px;color:#64748b}
+.mobile-order-card__footer{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:9px;border-top:1px solid #f0f3f7;margin-top:6px;padding-top:6px}
+.mobile-order-card__status{position:relative;display:inline-flex;align-items:center;color:#bb6300}
+.mobile-order-card__status select{min-height:28px;max-width:100%;appearance:none;border:1px solid #ffe29a;border-radius:9px;background:#fffbeb;padding:3px 24px 3px 9px;color:inherit;font:650 12px/18px var(--font-sans);cursor:pointer}
+.mobile-order-card__status>svg{pointer-events:none;position:absolute;right:7px}.mobile-order-card__status select:disabled{cursor:default;opacity:.7}
+.mobile-order-card__status.is-new{color:#2563eb}.mobile-order-card__status.is-new select{border-color:#bfdbfe;background:#eff6ff}.mobile-order-card__status.is-delivered{color:#047857}.mobile-order-card__status.is-delivered select{border-color:#a7f3d0;background:#ecfdf5}.mobile-order-card__status.is-cancelled{color:#64748b}.mobile-order-card__status.is-cancelled select{border-color:#e2e8f0;background:#f8fafc}
+.mobile-order-card__dates{display:flex;min-width:0;flex-wrap:wrap;align-items:center;justify-content:space-between;column-gap:6px;row-gap:3px;color:#6b7f9b;font-size:10px;line-height:14px}
+.mobile-order-card__date,.mobile-order-card__carry{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}.mobile-order-card__dates svg{flex-shrink:0;color:#7790ae}
+.mobile-order-card__menu{position:relative;justify-self:end}.mobile-order-card__menu-button{display:flex;width:28px;height:28px;align-items:center;justify-content:center;border:1px solid #e8edf5;border-radius:8px;background:#fff;color:#7a8da8}
+.mobile-order-card__menu-button:hover{background:#f8fafc}
+.mobile-order-card__menu-list{position:absolute;right:0;bottom:calc(100% + 6px);z-index:30;width:152px;border:1px solid #e2e8f0;border-radius:11px;background:#fff;padding:4px;box-shadow:0 8px 25px #0f172a18}
+.mobile-order-card__menu-list button{display:flex;min-height:40px;width:100%;align-items:center;gap:8px;border-radius:7px;padding:8px;font-size:12px;font-weight:600;color:#334155;text-align:left}
+.mobile-order-card__menu-list button:hover{background:#f1f5f9}.mobile-order-card__menu-list .is-destructive{color:#e11d48}
+.mobile-order-card button:focus-visible,.mobile-order-card select:focus-visible,.mobile-order-card a:focus-visible{outline:2px solid #2563eb;outline-offset:2px}
+@container(max-width:310px){.mobile-order-card__grid{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr) minmax(0,.85fr);column-gap:5px}.mobile-order-card__money{font-size:12px}.mobile-order-card__products{font-size:13px;line-height:18px}.mobile-order-card__phone{font-size:11px}.mobile-order-card__footer{gap:6px}.mobile-order-card__dates{font-size:10px}.mobile-order-card__status select{font-size:11px}}
+
+.mobile-order-card[data-can-open="true"] .mobile-order-card__product bdi,.mobile-order-card[data-can-open="true"] .mobile-order-card__name,.mobile-order-card[data-can-open="true"] .mobile-order-card__address{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}

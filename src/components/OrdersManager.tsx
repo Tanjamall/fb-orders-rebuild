@@ -1,3 +1,4 @@
+import {MobileOrderCard} from './MobileOrderCard';
 import {businessToday} from '../services/backendConfig';
 import {matchesOrderPeriod,carryOverLabel} from '../services/orderPeriod';
 import {DailyDeliveryEditor} from "./DailyDeliveryEditor";
@@ -538,129 +539,10 @@ export const OrdersManager: React.FC<OrdersManagerProps> = ({ orders, dailyCosts
             </div>
           </div>
 
-          {/* Mobile Cards View (Untouched for Mobile Devices) */}
-          <div className="md:hidden grid grid-cols-1 gap-3.5">
-            {filteredOrders.map((ord) => {
-                const currentStatus = normalizeStatus(ord.status);
-                const cfg = statusConfig[currentStatus];
-                const mapsLink = ord.googleMapsUrl || (ord.customerAddress ? `https://maps.google.com/?q=${encodeURIComponent(ord.customerAddress)}` : null);
-                return (<div key={ord.id} className="bg-white rounded-2xl border border-slate-200 p-4 shadow-xs hover:border-slate-300 hover:shadow-md transition-all flex flex-col justify-between gap-3">
-                {/* Upper Section */}
-                <div className="space-y-2.5">
-                  {/* Line 1: Customer Name + Phone + Price */}
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-bold text-slate-900 text-sm sm:text-base tracking-tight truncate">
-                          {ord.buyerName || 'Facebook Customer'}
-                        </span>
-                        {ord.customerPhone && (<span className="inline-flex shrink-0 items-center gap-1"><a href={`tel:${ord.customerPhone}`} className="inline-flex items-center gap-1 text-[11px] font-semibold text-blue-600 hover:text-blue-800 bg-blue-50 px-2 py-0.5 rounded-md transition-colors" title="Tap to call customer">
-                            <Phone className="w-3 h-3"/>
-                            <span>{ord.customerPhone}</span>
-                          </a><WhatsAppLink phone={ord.customerPhone}/></span>)}
-                      </div>
-                    </div>
-
-                    {/* Revenue */}
-                    <div className="text-right shrink-0">
-                      <span className="text-base font-black text-slate-900 block leading-tight">
-                        DH {ord.totalRevenue.toFixed(2)}
-                      </span>
-                    </div>
-                  </div>
-
-                  {periodFilter==='this_month'&&carryOverLabel(ord,thisMonthStr)&&<span className="mt-1 inline-flex w-fit rounded-md border border-amber-200 bg-amber-50 px-1.5 py-0.5 text-[10px] font-semibold text-amber-700">{carryOverLabel(ord,thisMonthStr)}</span>}
-                  <div className="flex items-start justify-between gap-3 rounded-xl border border-slate-100 bg-slate-50 p-2"><div className="min-w-0 flex-1"><OrderItems order={ord} showPrices={false}/></div>{canViewFinancials&&<div className="shrink-0 text-right" aria-label="Order net profit"><span className={'font-mono text-xs font-semibold '+(ord.netProfit<0?'text-rose-600':'text-emerald-600')}>{ord.netProfit<0?'−':'+'}DH {Math.abs(ord.netProfit).toFixed(2)}</span></div>}</div>
-                  {/* Line 3: Delivery Address & Google Maps Link */}
-                  {(ord.customerAddress || ord.googleMapsUrl) && (<div className="flex items-start justify-between gap-2 text-xs bg-slate-50/60 p-2 rounded-xl border border-slate-100">
-                      <div className="flex items-start gap-1.5 min-w-0 flex-1">
-                        <MapPin className="w-3.5 h-3.5 text-blue-600 shrink-0 mt-0.5"/>
-                        <div className="min-w-0 flex-1">
-                          <span className="text-[11px] sm:text-xs text-slate-700 block leading-tight line-clamp-2">
-                            {ord.customerAddress || 'Delivery Location'}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-1 shrink-0">
-                        {ord.customerAddress && (<button onClick={() => copyToClipboard(ord.customerAddress!, ord.id)} title="Copy address" className="p-1 text-slate-400 hover:text-slate-600 rounded cursor-pointer">
-                            {copiedId === ord.id ? (<Check className="w-3.5 h-3.5 text-emerald-600"/>) : (<Copy className="w-3.5 h-3.5"/>)}
-                          </button>)}
-                        {mapsLink && (<a href={mapsLink} target="_blank" rel="noreferrer" title={ord.googleMapsUrl ? "Open direct Google Map link" : "Search address on Google Maps"} className="inline-flex items-center gap-1 text-[11px] font-bold text-blue-600 hover:text-blue-800 bg-white border border-blue-200 px-2 py-0.5 rounded-lg shadow-2xs hover:bg-blue-50 transition-colors">
-                            <Navigation className="w-3 h-3 text-blue-600"/>
-                            <span>Map</span>
-                            <ExternalLink className="w-2.5 h-2.5"/>
-                          </a>)}
-                      </div>
-                    </div>)}
-
-                  {/* Line 4: Order Note (Inline with icon to save space) */}
-                  {ord.notes && (<div className="flex items-start gap-1.5 px-2.5 py-1.5 bg-amber-50/80 border border-amber-200/70 rounded-xl text-amber-900">
-                      <MessageSquareText className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5"/>
-                      <p className="text-[11px] font-medium leading-snug break-words flex-1">
-                        {ord.notes}
-                      </p>
-                    </div>)}
-
-                  {/* Line 5: Confirmation Team Agent & Reward Badge */}
-                  {ord.confirmationMemberName && (<div className="flex items-center justify-between gap-1.5 px-2.5 py-1.5 bg-blue-50/70 border border-blue-200/70 rounded-xl text-[11px]">
-                      <div className="flex items-center gap-1.5 text-blue-900 font-semibold truncate">
-                        <Award className="w-3.5 h-3.5 text-blue-600 shrink-0"/>
-                        <span className="truncate">Confirmed by: <strong>{ord.confirmationMemberName}</strong></span>
-                      </div>
-                      <div className="flex items-center gap-1.5 shrink-0">
-                        <span className="font-black text-blue-800">
-                          DH {(ord.memberReward || 0).toFixed(2)}
-                        </span>
-                        {ord.rewardCalculationMode === 'per_item' && ord.quantity > 1 && (<span className="text-[9px] font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200 px-1 rounded">
-                            {ord.quantity}×
-                          </span>)}
-                        <span className={`text-[9px] font-bold px-1.5 py-0.2 rounded-full uppercase ${ord.status === 'cancelled'
-                            ? 'bg-slate-200 text-slate-600'
-                            : ord.rewardStatus === 'granted'
-                                ? 'bg-emerald-100 text-emerald-800'
-                                : 'bg-amber-100 text-amber-800'}`}>
-                          {ord.status === 'cancelled' ? 'Void' : ord.legacySettlementUnknown ? 'Recorded bonus' : ord.rewardStatus === 'granted' ? 'Earned' : 'Pending'}
-                        </span>
-                      </div>
-                    </div>)}
-                </div>
-
-                {/* Bottom Section: Compact Status Dropdown Menu + Date + Actions (Saves space) */}
-                <div className="pt-2.5 border-t border-slate-100 mt-auto flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2 min-w-0 flex-1">
-                    {/* Status Dropdown Menu */}
-                    <div className="relative inline-flex items-center">
-                      <select value={currentStatus} onChange={(e) => handleQuickStatusChange(ord, e.target.value as OrderStatus)} disabled={!canEditInventory} aria-label="Order status" className={`text-[11px] sm:text-xs font-bold py-1 pl-2.5 pr-6 rounded-lg border cursor-pointer appearance-none transition-colors ${cfg.bg} ${cfg.text} ${cfg.border} hover:opacity-95 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 disabled:opacity-60 disabled:cursor-not-allowed`}>
-                        <option value="new" className="text-slate-900 bg-white font-medium">New</option>
-                        <option value="confirmed" className="text-slate-900 bg-white font-medium">Confirmed</option>
-                        <option value="delivered" className="text-slate-900 bg-white font-medium">Delivered</option>
-                        <option value="cancelled" className="text-slate-900 bg-white font-medium">Cancelled</option>
-                      </select>
-                      <ChevronDown className={`w-3.5 h-3.5 absolute right-1.5 pointer-events-none ${cfg.text}`}/>
-                    </div>
-
-                    <span className="text-[10px] sm:text-[11px] font-medium truncate">
-                      {currentStatus === 'delivered' ? (<span className="text-emerald-700 font-bold" title={ord.deliveredDate && ord.deliveredDate !== ord.date ? `Delivered: ${ord.deliveredDate} (Ordered: ${ord.date})` : `Delivered: ${ord.deliveredDate || ord.date}`}>
-                          Delivered: {ord.deliveredDate || ord.date}
-                        </span>) : (<span className="text-slate-400">{ord.date}</span>)}
-                    </span>
-                  </div>
-
-                  {/* Actions */}
-                  <div className="flex items-center gap-0.5 text-slate-400 shrink-0">
-                    {canEditInventory && (<button onClick={() => onOpenNewSale(ord)} title="Edit order details" className="p-1.5 hover:text-blue-600 hover:bg-slate-100 rounded-lg cursor-pointer transition-colors">
-                        <Edit3 className="w-3.5 h-3.5"/>
-                      </button>)}
-                    {canDeleteRecords && (<button onClick={() => handleDelete(ord)} title="Delete order" className="p-1.5 hover:text-rose-600 hover:bg-rose-50 rounded-lg cursor-pointer transition-colors">
-                        <Trash2 className="w-3.5 h-3.5"/>
-                      </button>)}
-                  </div>
-                </div>
-
-              </div>);
-            })}
-        </div>
+          {/* Mobile cards use the approved compact layout; desktop table stays unchanged. */}
+          <div className="md:hidden grid grid-cols-1 gap-2.5">
+            {filteredOrders.map(order=><MobileOrderCard key={order.id} order={order} status={normalizeStatus(order.status)} carryOver={periodFilter==='this_month'?carryOverLabel(order,thisMonthStr):null} canEdit={canEditInventory} canDelete={canDeleteRecords} canViewFinancials={canViewFinancials} copied={copiedId===order.id} onCopy={copyToClipboard} onEdit={onOpenNewSale} onDelete={handleDelete} onStatusChange={handleQuickStatusChange}/>)}
+          </div>
       </>)}
 
       {/* Floating "New Order" Action Button: High contrast, thumb-reachable at bottom */}

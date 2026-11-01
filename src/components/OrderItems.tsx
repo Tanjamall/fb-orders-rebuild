@@ -6,5 +6,5 @@ export function OrderItems({order,showPrices=true}:{order:Order;showPrices?:bool
 }
 export function InventoryVariants({item}:{item:InventoryItem}) {
  if(!item.variants?.length)return null;
- return <details className="mt-2 border-t border-slate-100 pt-2 text-xs"><summary className="cursor-pointer font-semibold text-slate-600">{item.variantName||'Variants'} · {item.variants.length}</summary><div className="mt-2 grid grid-cols-2 gap-x-4 gap-y-2">{item.variants.map(v=><div key={v.id} className="flex items-center justify-between gap-2"><bdi className="text-slate-600">{v.label}</bdi><span className={'rounded px-2 py-0.5 font-mono font-semibold '+(v.stock?'bg-slate-100 text-slate-800':'bg-rose-50 text-rose-700')}>{v.stock}</span></div>)}</div></details>;
+ return <details className="mt-2 border-t border-slate-100 pt-2 text-xs"><summary className="cursor-pointer font-semibold text-slate-600">{item.variantName||'Variants'} · {item.variants.length}</summary><div className="mt-2 flex flex-wrap gap-x-3 gap-y-2">{item.variants.map(v=><div key={v.id} className="inline-flex max-w-full items-center gap-1.5"><bdi className="min-w-0 break-words text-slate-600">{v.label}</bdi><span className={'rounded px-2 py-0.5 font-mono font-semibold '+(v.stock?'bg-slate-100 text-slate-800':'bg-rose-50 text-rose-700')}>{v.stock}</span></div>)}</div></details>;
 }

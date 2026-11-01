@@ -36,4 +36,6 @@
 .mobile-order-card button:focus-visible,.mobile-order-card select:focus-visible,.mobile-order-card a:focus-visible{outline:2px solid #2563eb;outline-offset:2px}
 @container(max-width:310px){.mobile-order-card__grid{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr) minmax(0,.85fr);column-gap:5px}.mobile-order-card__money{font-size:12px}.mobile-order-card__products{font-size:13px;line-height:18px}.mobile-order-card__phone{font-size:11px}.mobile-order-card__footer{gap:6px}.mobile-order-card__dates{font-size:10px}.mobile-order-card__status select{font-size:11px}}
 
-.mobile-order-card[data-can-open="true"] .mobile-order-card__product bdi,.mobile-order-card[data-can-open="true"] .mobile-order-card__name,.mobile-order-card[data-can-open="true"] .mobile-order-card__address{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.mobile-order-card[data-can-open="true"] .mobile-order-card__product-label,.mobile-order-card[data-can-open="true"] .mobile-order-card__name,.mobile-order-card[data-can-open="true"] .mobile-order-card__address{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+
+.mobile-order-card__product-label{min-width:0;text-align:left;direction:ltr;overflow-wrap:anywhere}

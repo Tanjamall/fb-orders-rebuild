@@ -19,7 +19,7 @@ export function MobileOrderCard({order,status,carryOver,canEdit,canDelete,canVie
  const rewardState=status==='cancelled'?'Void':order.legacySettlementUnknown?'Recorded bonus':order.rewardStatus==='granted'?'Earned':'Pending';
  return <article className="mobile-order-card" data-can-open={canEdit} aria-label={'Order for '+(order.buyerName||'Facebook Customer')} onClick={()=>{if(canEdit)onEdit(order);}}>
  <div className="mobile-order-card__grid">
-  <div className="mobile-order-card__products">{lines.map((line,index)=><div key={index} className="mobile-order-card__product"><span className="mobile-order-card__quantity">{line.quantity} ×</span><bdi title={lineName(line)}>{lineName(line)}</bdi></div>)}</div>
+  <div className="mobile-order-card__products">{lines.map((line,index)=><div key={index} className="mobile-order-card__product"><span className="mobile-order-card__quantity">{line.quantity} ×</span><span className="mobile-order-card__product-label" title={lineName(line)}><bdi>{lineName(line)}</bdi></span></div>)}</div>
   <span className="mobile-order-card__money" aria-label="Order total">DH {amount(order.totalRevenue)}</span>
   {canViewFinancials?<span className={'mobile-order-card__money mobile-order-card__profit'+(order.netProfit<0?' is-negative':'')} aria-label="Order net profit">{order.netProfit<0?'−':'+'}DH {amount(Math.abs(order.netProfit))}</span>:<span aria-hidden="true"/>}
   <span className="mobile-order-card__name" title={order.buyerName}>{order.buyerName||'Facebook Customer'}</span>

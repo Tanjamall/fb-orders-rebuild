@@ -16,6 +16,7 @@ await db.exec(fs.readFileSync('supabase/migrations/20261031101505_order_delivery
 await db.exec(fs.readFileSync('supabase/migrations/20261031102131_refresh_pending_order_prices.sql','utf8'));
 await db.exec(fs.readFileSync('supabase/migrations/20261031224203_lossless_order_compatibility.sql','utf8'));
 await db.exec(fs.readFileSync('supabase/migrations/20261031230351_bundle_cost_estimates.sql','utf8'));
+await db.exec(fs.readFileSync('supabase/migrations/20261101114427_fix_inventory_variant_alias.sql','utf8'));
 const ids = {
   admin: "11111111-1111-4111-8111-111111111111",
   viewer: "22222222-2222-4222-8222-222222222222",
@@ -314,6 +315,15 @@ await rpc("restock_inventory",[ids.w,vp,{quantity:2,cost_price:15,selling_price:
 assert.deepEqual((await sql("select variants from public.inventory where id=$1",[vp])).rows[0].variants.map((v:any)=>v.stock),[3,2]);
 await fails(()=>rpc("restock_inventory",[ids.w,vp,{quantity:1,cost_price:15,selling_price:22}]),/Choose a variant/);
 passed("Restock is variant-specific and requires a valid selection");
+// Renaming a variant product must leave inventory and financial history unchanged.
+const beforeRename=(await sql("select * from public.inventory where id=$1",[vp])).rows[0];
+const movementCount=(await sql("select count(*)::int n from public.inventory_movements where product_id=$1",[vp])).rows[0].n;
+await rpc("save_inventory",[ids.w,vp,{title:"Gloves-Mask",variants:beforeRename.variants}]);
+const afterRename=(await sql("select * from public.inventory where id=$1",[vp])).rows[0];
+assert.equal(afterRename.title,"Gloves-Mask");assert.deepEqual(afterRename.variants,beforeRename.variants);assert.equal(afterRename.stock,beforeRename.stock);
+assert.equal((await sql("select count(*)::int n from public.inventory_movements where product_id=$1",[vp])).rows[0].n,movementCount);
+await fails(()=>rpc("save_inventory",[ids.w,vp,{variants:[beforeRename.variants[0]]}]),/Keep variants with stock or open orders/);
+passed("Variant product renames save without moving stock; protected variants cannot be removed");
 await rpc("save_daily_delivery_cost",[ids.w,"2026-10-31",7]);
 assert.equal((await rpc("read_workspace_records",[ids.w,"daily_delivery_costs",0,500,null])).rows[0].result.rows[0].amount,7);
 await as(ids.viewer);

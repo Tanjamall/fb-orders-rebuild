@@ -1,3 +1,4 @@
+import './InventoryManager.css';
 import { InventoryVariants } from "./OrderItems";
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { Package, Search, Filter, Plus, Edit3, Trash2, AlertTriangle, ExternalLink, ShoppingBag, MoreVertical, Archive, ArchiveRestore, Layers, ChevronDown, X, Check, Tag, PackagePlus, Eye, History, TrendingUp, Clock } from 'lucide-react';
@@ -272,7 +273,7 @@ export const InventoryManager: React.FC<InventoryManagerProps> = ({ inventory, v
               <span className="w-16 text-right">Cost</span>
               <span className="w-16 text-right">Price</span>
               <span className="w-12 text-center">Stock</span>
-              <span className="w-[185px] text-center">Actions</span>
+              <span className="w-7 text-center">Actions</span>
             </div>
           </div>
 
@@ -281,7 +282,10 @@ export const InventoryManager: React.FC<InventoryManagerProps> = ({ inventory, v
                 const isOut = (item.stock === 0 || item.status === 'out_of_stock') && item.status !== 'archived';
                 const isArchived = item.status === 'archived';
                 const isMenuOpen = activeMenuId === item.id;
-                const renderDropdownMenu = () => (<div className="absolute right-0 mt-1 w-44 bg-white rounded-xl shadow-xl border border-slate-200 py-1.5 z-50 animate-in fade-in zoom-in-95 duration-100 text-xs">
+                const renderDropdownMenu = () => (<div role="menu" aria-label="Product actions" className="absolute right-0 mt-1 w-44 bg-white rounded-xl shadow-xl border border-slate-200 py-1.5 z-50 animate-in fade-in zoom-in-95 duration-100 text-xs">
+
+                <button role="menuitem" onClick={() => {setActiveMenuId(null);onOpenProductDetails(item);}} className="w-full text-left px-3 py-2 text-slate-700 hover:bg-slate-50 flex items-center gap-2 cursor-pointer font-medium"><Eye className="w-3.5 h-3.5 text-slate-400"/>Details</button>
+                {canEditInventory && !isArchived && <button role="menuitem" onClick={() => {setActiveMenuId(null);onOpenRestock(item);}} className="w-full text-left px-3 py-2 text-slate-700 hover:bg-slate-50 flex items-center gap-2 cursor-pointer font-medium"><PackagePlus className="w-3.5 h-3.5 text-blue-600"/>Restock</button>}
                 {canEditInventory && (<button onClick={() => {
                             setActiveMenuId(null);
                             if (item.isBundle) {
@@ -356,19 +360,7 @@ export const InventoryManager: React.FC<InventoryManagerProps> = ({ inventory, v
                     </div>
 
                     {/* Action Buttons Group */}
-                    <div className="w-[185px] flex items-center justify-end gap-1.5">
-                      {/* Restock Button */}
-                      {canEditInventory && !isArchived && (<button onClick={() => onOpenRestock(item)} className="px-2.5 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 text-xs font-bold transition-colors cursor-pointer flex items-center gap-1 shadow-2xs shrink-0" title="Restock this product (FIFO)">
-                          <PackagePlus className="w-3.5 h-3.5"/>
-                          <span>Restock</span>
-                        </button>)}
-
-                      {/* Details Button */}
-                      <button onClick={() => onOpenProductDetails(item)} className="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-colors cursor-pointer flex items-center gap-1 shrink-0" title="View full product details">
-                        <Eye className="w-3.5 h-3.5 text-slate-500"/>
-                        <span>Details</span>
-                      </button>
-
+                    <div className="w-7 flex items-center justify-end gap-1.5">
                       {/* Secondary Actions 3-dots Menu */}
                       <div className="relative shrink-0" data-item-menu>
                         <button onClick={() => setActiveMenuId(isMenuOpen ? null : item.id)} className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition-colors cursor-pointer" title="More actions" aria-label="More actions">
@@ -380,71 +372,12 @@ export const InventoryManager: React.FC<InventoryManagerProps> = ({ inventory, v
                   </div>
                 </div>
 
-                {/* Mobile View (< sm): Clean 2-tier layout that stays 100% inside container card */}
-                <div className="flex sm:hidden flex-col gap-2">
-                  {/* Top Tier: Title and 3-dots menu */}
-                  <div className="flex items-start justify-between gap-2">
-                    <button onClick={() => onOpenProductDetails(item)} className="font-bold text-slate-900 text-sm hover:text-blue-600 transition-colors cursor-pointer text-left line-clamp-2 flex-1 leading-snug" title={item.title}>
-                      {item.title}
-                    </button>
-
-                    <div className="relative shrink-0" data-item-menu>
-                      <button onClick={() => setActiveMenuId(isMenuOpen ? null : item.id)} className="p-1 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition-colors cursor-pointer" title="More actions" aria-label="More actions">
-                        <MoreVertical className="w-4 h-4"/>
-                      </button>
-                      {isMenuOpen && renderDropdownMenu()}
-                    </div>
-                  </div>
-
-                  {/* Bottom Tier: Metrics on left, Restock & Details buttons on right */}
-                  <div className="flex items-center justify-between gap-2 pt-2 border-t border-slate-100">
-                    {/* Cost, Price, Stock */}
-                    <div className="flex items-center gap-3">
-                      <div>
-                        <span className="text-[10px] uppercase font-bold text-slate-400 block leading-tight">
-                          Cost
-                        </span>
-                        <span className="text-xs font-semibold text-slate-600">
-                          DH {item.costPrice.toFixed(2)}
-                        </span>
-                      </div>
-
-                      <div>
-                        <span className="text-[10px] uppercase font-bold text-slate-400 block leading-tight">
-                          Price
-                        </span>
-                        <span className="text-xs font-black text-slate-900">
-                          DH {item.sellingPrice.toFixed(2)}
-                        </span>
-                      </div>
-
-                      <div>
-                        <span className="text-[10px] uppercase font-bold text-slate-400 block leading-tight">
-                          Stock
-                        </span>
-                        <span className={`text-xs font-black px-1.5 py-0.5 rounded-md inline-block leading-none ${isOut
-                        ? 'bg-rose-100 text-rose-800'
-                        : isLow
-                            ? 'bg-amber-100 text-amber-800'
-                            : 'bg-emerald-50 text-emerald-800'}`}>
-                          {item.stock}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Actions: Restock and Details */}
-                    <div className="flex items-center gap-1.5 shrink-0">
-                      {canEditInventory && !isArchived && (<button onClick={() => onOpenRestock(item)} className="px-2 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 text-xs font-bold transition-colors cursor-pointer flex items-center gap-1 shadow-2xs" title="Restock this product (FIFO)">
-                          <PackagePlus className="w-3.5 h-3.5"/>
-                          <span>Restock</span>
-                        </button>)}
-
-                      <button onClick={() => onOpenProductDetails(item)} className="px-2 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-colors cursor-pointer flex items-center gap-1" title="View full product details">
-                        <Eye className="w-3.5 h-3.5 text-slate-500"/>
-                        <span>Details</span>
-                      </button>
-                    </div>
-                  </div>
+                <div className="inventory-mobile-row sm:hidden">
+                  <button onClick={() => onOpenProductDetails(item)} className="inventory-mobile-row__title" title={item.title}><bdi>{item.title}</bdi></button>
+                  <div className="inventory-mobile-row__metric"><span>Cost</span><strong>{canViewFinancials ? 'DH '+item.costPrice.toLocaleString('en-GB',{maximumFractionDigits:2}) : '—'}</strong></div>
+                  <div className="inventory-mobile-row__metric"><span>Sell</span><strong className="text-slate-900">DH {item.sellingPrice.toLocaleString('en-GB',{maximumFractionDigits:2})}</strong></div>
+                  <div className="inventory-mobile-row__metric"><span>Stock</span><strong className={isOut?'text-rose-700':isLow?'text-amber-700':'text-emerald-700'}>{item.stock}</strong></div>
+                  <div className="relative" data-item-menu><button onClick={() => setActiveMenuId(isMenuOpen ? null : item.id)} className="inventory-mobile-row__menu" aria-label={'Actions for '+item.title} aria-haspopup="menu" aria-expanded={isMenuOpen}><MoreVertical className="w-4 h-4"/></button>{isMenuOpen && renderDropdownMenu()}</div>
                 </div>
                 <InventoryVariants item={item}/>
               </div>);

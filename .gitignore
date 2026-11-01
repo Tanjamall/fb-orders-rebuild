@@ -1,0 +1,12 @@
+node_modules/
+dist/
+build/
+coverage/
+.env*
+!.env.example
+*.log
+.DS_Store
+/migration-private/
+/live-site/
+/graphify-out/
+/site-release.tar.gz
